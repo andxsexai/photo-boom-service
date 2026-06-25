@@ -14,7 +14,8 @@
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--bio2);text-transform:uppercase;margin-bottom:10px;}
   .eyebrow::before{content:"◆ ";}
   h1{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(28px,6vw,44px);margin:0;background:linear-gradient(120deg,var(--ink) 30%,var(--bio2) 60%,var(--violet) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .sub{color:var(--muted);font-size:14px;margin-top:10px;max-width:440px;}
+  .live-link{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--bio);margin-top:8px;word-break:break-all;}
+  .live-link a{color:var(--bio2);text-decoration:none;border-bottom:1px solid rgba(142,255,230,0.3);}
   .phone{width:390px;max-width:94vw;border-radius:42px;background:linear-gradient(160deg,#0c1a1d,#04090b);border:1px solid rgba(255,255,255,0.06);box-shadow:0 0 0 1px rgba(57,255,212,0.08),0 40px 80px -30px rgba(57,255,212,0.12);padding:14px;}
   .notch{width:90px;height:18px;background:#020405;border-radius:12px;margin:0 auto 10px;}
   .screen{background:var(--bg2);border-radius:30px;overflow:hidden;border:1px solid var(--line);}
@@ -73,6 +74,7 @@
     <div class="eyebrow">ANDX NETWORK</div>
     <h1>PHOTO BOOM</h1>
     <div class="sub">5 стилей · 5 разных образов · сравнение ДО и ПОСЛЕ</div>
+    <div class="live-link" id="liveLink"></div>
   </div>
   <div class="phone">
     <div class="notch"></div>
@@ -266,6 +268,16 @@ document.getElementById('processBtn').onclick=async()=>{
 
 initSession();
 loadDemos();
+
+fetch('/health').then(r=>r.json()).then(h=>{
+  const url=h.url||location.origin;
+  const el=document.getElementById('liveLink');
+  if(location.hostname==='localhost'||location.hostname==='127.0.0.1'){
+    el.innerHTML='Локально · облако: <a href="https://photo-boom-andx.fly.dev" target="_blank">photo-boom-andx.fly.dev</a>';
+  } else {
+    el.innerHTML=`🟢 Онлайн · <a href="${url}">${url.replace('https://','')}</a>`;
+  }
+}).catch(()=>{});
 setSlider(50);
 </script>
 </body>

@@ -138,7 +138,12 @@ async def root():
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "brand": "ANDX NETWORK"}
+    return {
+        "status": "ok",
+        "brand": "ANDX NETWORK",
+        "mode": "local" if enhancer._local_ready else "cloud",
+        "url": settings.public_url or None,
+    }
 
 
 @app.get("/styles", response_model=list[StyleInfo])

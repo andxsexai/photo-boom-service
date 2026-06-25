@@ -45,7 +45,20 @@ photo-boom-service/
 └── requirements.txt
 ```
 
-## Быстрый старт
+## Публичная ссылка (облако 24/7)
+
+**Сейчас:** сервис работает только локально — `http://localhost:8000`  
+**Чтобы работал без Mac:** задеплойте один раз → см. **[DEPLOY.md](DEPLOY.md)**
+
+| Платформа | URL после деплоя | Сложность |
+|-----------|------------------|-----------|
+| [Render](https://render.com/deploy?repo=https://github.com/andxsexai/photo-boom-service) | `photo-boom.onrender.com` | 1 клик |
+| Fly.io | `photo-boom-andx.fly.dev` | CLI + карта |
+| HuggingFace Spaces | `huggingface.co/spaces/andxsexai/photo-boom` | бесплатно |
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/andxsexai/photo-boom-service)
+
+## Быстрый старт (локально)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate

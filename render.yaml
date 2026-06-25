@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: photo-boom
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: USE_LOCAL_MODELS
+        value: "false"
+      - key: USE_HF_FALLBACK
+        value: "true"
+      - key: PUBLIC_URL
+        value: https://photo-boom.onrender.com
