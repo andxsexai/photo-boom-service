@@ -1,0 +1,32 @@
+[
+  {
+    "style": "upgrade",
+    "name": "Upgrade",
+    "num": 1,
+    "label": "Studio portrait"
+  },
+  {
+    "style": "quiet_luxury",
+    "name": "Quiet Luxury",
+    "num": 2,
+    "label": "Soft elegance"
+  },
+  {
+    "style": "cinematic_twilight",
+    "name": "Cinematic Twilight",
+    "num": 3,
+    "label": "Natural light"
+  },
+  {
+    "style": "bw_noir",
+    "name": "B&W Noir",
+    "num": 4,
+    "label": "Classic beauty"
+  },
+  {
+    "style": "magazine_cover",
+    "name": "Magazine Cover",
+    "num": 5,
+    "label": "Fashion editorial"
+  }
+]

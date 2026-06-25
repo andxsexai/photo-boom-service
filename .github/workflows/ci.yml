@@ -59,6 +59,9 @@ jobs:
           assert client.get("/health").json()["status"] == "ok"
           assert len(client.get("/styles").json()) == 5
           assert client.get("/demo/samples").status_code == 200
+          demo = client.get("/demo/samples").json()
+          assert len(demo["previews"]) == 5
+          assert demo["previews"][0].get("original")
           print("API smoke tests passed")
           PY
 

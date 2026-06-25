@@ -86,7 +86,9 @@ class PreviewItem(BaseModel):
     style: str
     name: str
     num: int
-    thumbnail: str  # data:image/jpeg;base64,...
+    thumbnail: str
+    original: str | None = None
+    label: str | None = None
 
 
 class PreviewAllResponse(BaseModel):
@@ -268,32 +270,50 @@ async def download(session_id: str, style: str):
 
 @app.get("/demo/samples")
 async def demo_samples():
-    """Pre-generated style examples — always available without upload."""
-    original = DEMO_DIR / "original.jpg"
-    if not original.exists():
-        raise HTTPException(503, "Demo samples not generated yet. Run: python scripts/generate_demos.py")
+    """Pre-generated examples — unique portrait per style."""
+    manifest_path = DEMO_DIR / "manifest.json"
+    if not manifest_path.exists() and not (DEMO_DIR / "original_upgrade.jpg").exists():
+        raise HTTPException(503, "Demo not ready. Run: python scripts/generate_demos.py")
 
     previews = []
     for s in all_styles():
-        path = DEMO_DIR / f"{s.value}.jpg"
-        if not path.exists():
+        proc_path = DEMO_DIR / f"{s.value}.jpg"
+        orig_path = DEMO_DIR / f"original_{s.value}.jpg"
+        if not proc_path.exists():
             continue
-        img = Image.open(path).convert("RGB")
+        label = None
+        if manifest_path.exists():
+            import json as _json
+            for item in _json.loads(manifest_path.read_text()):
+                if item.get("style") == s.value:
+                    label = item.get("label")
+                    break
+        orig_uri = None
+        if orig_path.exists():
+            orig_uri = _to_data_uri(Image.open(orig_path).convert("RGB"), quality=82)
         previews.append(
             PreviewItem(
                 style=s.value,
                 name=STYLE_META[s]["name"],
                 num=STYLE_META[s]["num"],
-                thumbnail=_to_data_uri(img, quality=82),
+                thumbnail=_to_data_uri(Image.open(proc_path).convert("RGB"), quality=82),
+                original=orig_uri,
+                label=label,
             )
         )
 
-    orig_uri = _to_data_uri(Image.open(original).convert("RGB"), quality=82)
     return {
-        "original": orig_uri,
         "previews": previews,
-        "note": "Примеры обработки на демо-фото. Загрузите своё — увидите предпросмотр на нём.",
+        "note": "Каждый стиль — своё фото. Слева ДО, справа ПОСЛЕ.",
     }
+
+
+@app.get("/demo/original/{style}")
+async def demo_original_image(style: Style):
+    path = DEMO_DIR / f"original_{style.value}.jpg"
+    if not path.exists():
+        raise HTTPException(404, "Demo original not found")
+    return FileResponse(path, media_type="image/jpeg")
 
 
 @app.get("/demo/{style}")
@@ -306,7 +326,7 @@ async def demo_style_image(style: Style):
 
 @app.on_event("startup")
 async def ensure_demos():
-    if (DEMO_DIR / "original.jpg").exists():
+    if (DEMO_DIR / "manifest.json").exists() or (DEMO_DIR / "original_upgrade.jpg").exists():
         return
     try:
         import subprocess
