@@ -10,108 +10,95 @@
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;}
   .stage{min-height:100vh;padding:36px 18px 48px;display:flex;flex-direction:column;align-items:center;gap:28px;position:relative;overflow-x:hidden;background:radial-gradient(circle at 18% 8%,rgba(160,107,255,0.18),transparent 40%),radial-gradient(circle at 85% 15%,rgba(57,255,212,0.14),transparent 45%),var(--bg);}
-  .spores{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-  .spore{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--bio);box-shadow:0 0 8px 2px var(--bio);opacity:.55;animation:drift 9s ease-in-out infinite;}
-  @keyframes drift{0%{transform:translateY(0);opacity:.1}50%{opacity:.7}100%{transform:translateY(-120px) translateX(14px);opacity:.05}}
-  .header{text-align:center;position:relative;z-index:2;}
-  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--bio2);text-transform:uppercase;opacity:.8;margin-bottom:10px;}
+  .header{text-align:center;z-index:2;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--bio2);text-transform:uppercase;margin-bottom:10px;}
   .eyebrow::before{content:"◆ ";}
   h1{font-family:'Unbounded',sans-serif;font-weight:900;font-size:clamp(28px,6vw,44px);margin:0;background:linear-gradient(120deg,var(--ink) 30%,var(--bio2) 60%,var(--violet) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .sub{color:var(--muted);font-size:14px;margin-top:10px;max-width:420px;margin-left:auto;margin-right:auto;}
-  .phone{width:380px;max-width:94vw;border-radius:42px;background:linear-gradient(160deg,#0c1a1d,#04090b);border:1px solid rgba(255,255,255,0.06);box-shadow:0 0 0 1px rgba(57,255,212,0.08),0 40px 80px -30px rgba(57,255,212,0.12);padding:14px;position:relative;z-index:2;}
+  .sub{color:var(--muted);font-size:14px;margin-top:10px;max-width:420px;}
+  .phone{width:380px;max-width:94vw;border-radius:42px;background:linear-gradient(160deg,#0c1a1d,#04090b);border:1px solid rgba(255,255,255,0.06);box-shadow:0 0 0 1px rgba(57,255,212,0.08),0 40px 80px -30px rgba(57,255,212,0.12);padding:14px;z-index:2;}
   .notch{width:90px;height:18px;background:#020405;border-radius:12px;margin:0 auto 10px;}
-  .screen{background:var(--bg2);border-radius:30px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;}
+  .screen{background:var(--bg2);border-radius:30px;overflow:hidden;border:1px solid var(--line);}
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;border-bottom:1px solid var(--line);}
   .brand{display:flex;align-items:center;gap:8px;font-family:'Unbounded',sans-serif;font-weight:800;font-size:14px;}
   .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--bio);box-shadow:0 0 10px 3px var(--bio);}
   .limit{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--bio2);border:1px solid var(--line);padding:3px 8px;border-radius:20px;}
-  .uploadzone{margin:16px;border-radius:18px;border:1px dashed rgba(57,255,212,0.35);background:rgba(57,255,212,0.03);padding:14px;text-align:center;position:relative;overflow:hidden;cursor:pointer;}
-  .uploadzone input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;}
-  .uploadzone .scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--bio),transparent);box-shadow:0 0 12px var(--bio);animation:scan 2.6s linear infinite;opacity:.85;display:none;z-index:1;}
-  .uploadzone.processing .scanline,.uploadzone.previewing .scanline{display:block;}
-  @keyframes scan{0%{top:8%}50%{top:88%}100%{top:8%}}
-  .compare-box{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:220px;margin-bottom:8px;display:none;}
+  .demo-banner{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--violet);text-align:center;padding:8px 16px 0;letter-spacing:.08em;}
+  .compare-box{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:220px;margin:12px 16px 8px;display:none;}
   .compare-box.visible{display:block;}
-  .compare-box img{width:100%;height:100%;object-fit:contain;display:block;}
+  .compare-box img{width:100%;height:100%;object-fit:cover;display:block;}
   .compare-box .after{position:absolute;inset:0;clip-path:inset(0 50% 0 0);}
   .compare-slider{position:absolute;inset:0;z-index:3;opacity:0;cursor:ew-resize;width:100%;height:100%;}
   .compare-handle{position:absolute;top:0;bottom:0;width:2px;background:var(--bio);box-shadow:0 0 12px var(--bio);left:50%;pointer-events:none;z-index:2;}
   .compare-labels{position:absolute;inset:0;pointer-events:none;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;padding:8px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#fff;text-shadow:0 1px 4px #000;}
+  .uploadzone{margin:0 16px 12px;border-radius:18px;border:1px dashed rgba(57,255,212,0.35);background:rgba(57,255,212,0.03);padding:14px;text-align:center;position:relative;cursor:pointer;}
+  .uploadzone input{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;}
+  .uploadzone .scanline{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--bio),transparent);animation:scan 2.6s linear infinite;display:none;z-index:1;}
+  .uploadzone.busy .scanline{display:block;}
+  @keyframes scan{0%{top:8%}50%{top:88%}100%{top:8%}}
   .uploadzone .label{font-size:12.5px;font-weight:600;}
   .uploadzone .hint{font-size:11px;color:var(--muted);margin-top:4px;}
-  .preview-badge{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--violet);letter-spacing:.1em;margin-top:6px;display:none;}
-  .preview-badge.visible{display:block;}
-  .section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;padding:0 16px;margin:4px 0 10px;}
+  .section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;padding:0 16px;margin:8px 0 10px;}
   .deck{display:flex;gap:10px;padding:0 16px 12px;overflow-x:auto;scroll-snap-type:x mandatory;}
   .deck::-webkit-scrollbar{display:none;}
-  .card{flex:0 0 110px;scroll-snap-align:start;border-radius:14px;background:var(--panel);border:1px solid var(--line);overflow:hidden;cursor:pointer;transition:border-color .2s,box-shadow .2s;}
-  .card .img{width:100%;height:130px;background:linear-gradient(165deg,#1b3a3f,#06101a);position:relative;overflow:hidden;}
-  .card .img img{width:100%;height:100%;object-fit:cover;display:none;}
-  .card .img.has-preview img{display:block;}
-  .card .img .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--muted);}
-  .card .img.has-preview .placeholder{display:none;}
+  .card{flex:0 0 110px;scroll-snap-align:start;border-radius:14px;background:var(--panel);border:1px solid var(--line);overflow:hidden;cursor:pointer;}
+  .card .img{width:100%;height:130px;overflow:hidden;background:#0a1c20;}
+  .card .img img{width:100%;height:100%;object-fit:cover;}
   .card .tag{padding:6px 7px 8px;}
   .card .tag .num{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--bio2);}
-  .card .tag .name{font-size:10.5px;font-weight:700;margin-top:2px;line-height:1.2;}
+  .card .tag .name{font-size:10.5px;font-weight:700;margin-top:2px;}
   .card.active{border-color:var(--bio);box-shadow:0 0 0 1px var(--bio),0 0 18px -2px var(--bio);}
   .card.done .tag .num{color:var(--violet);}
-  .cta{margin:8px 16px 16px;background:linear-gradient(120deg,var(--bio),var(--bio2),var(--violet));color:#02201c;font-family:'Unbounded',sans-serif;font-weight:800;font-size:12px;text-align:center;padding:13px 0;border-radius:14px;cursor:pointer;border:none;width:calc(100% - 32px);box-shadow:0 10px 26px -8px rgba(57,255,212,0.45);}
+  .cta{margin:8px 16px 16px;background:linear-gradient(120deg,var(--bio),var(--bio2),var(--violet));color:#02201c;font-family:'Unbounded',sans-serif;font-weight:800;font-size:12px;padding:13px 0;border-radius:14px;cursor:pointer;border:none;width:calc(100% - 32px);}
   .cta:disabled{opacity:.4;cursor:not-allowed;}
-  .cta.secondary{background:transparent;border:1px solid var(--line);color:var(--bio2);box-shadow:none;margin-top:0;}
-  .specs{width:380px;max-width:94vw;display:flex;flex-direction:column;gap:8px;z-index:2;}
+  .error{color:#ff5fc4;font-size:11px;margin:0 16px 8px;text-align:center;min-height:14px;}
+  .specs{width:380px;max-width:94vw;display:flex;flex-direction:column;gap:8px;}
   .spec-row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 2px;font-size:12px;}
   .spec-row .k{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:10.5px;}
   .spec-row .v{color:var(--bio2);font-weight:600;}
-  .footnote{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-align:center;max-width:380px;line-height:1.6;z-index:2;}
-  .error{color:#ff5fc4;font-size:11px;margin:0 16px 8px;text-align:center;}
 </style>
 </head>
 <body>
 <div class="stage">
-  <div class="spores" id="spores"></div>
   <div class="header">
     <div class="eyebrow">ANDX NETWORK</div>
     <h1>PHOTO BOOM</h1>
-    <div class="sub">Загрузите фото — увидите предпросмотр всех 5 стилей до финальной обработки</div>
+    <div class="sub">Примеры обработки сразу · предпросмотр на вашем фото · CodeFormer с вашего Mac</div>
   </div>
   <div class="phone">
     <div class="notch"></div>
     <div class="screen">
       <div class="topbar">
         <div class="brand"><span class="dot"></span>Photo Boom</div>
-        <div class="limit" id="limitBadge">0 / 5 ИСПОЛЬЗОВАНО</div>
+        <div class="limit" id="limitBadge">0 / 5</div>
+      </div>
+      <div class="demo-banner" id="demoBanner">◆ ДЕМО-ПРИМЕРЫ · ЗАГРУЗИТЕ СВОЁ ФОТО</div>
+      <div class="compare-box visible" id="compareBox">
+        <img id="compareOriginal" alt="original">
+        <div class="after"><img id="compareAfter" alt="preview"></div>
+        <div class="compare-handle" id="compareHandle"></div>
+        <input type="range" class="compare-slider" id="compareSlider" min="0" max="100" value="50">
+        <div class="compare-labels"><span>ДО</span><span>ПОСЛЕ</span></div>
       </div>
       <label class="uploadzone" id="uploadZone">
         <input type="file" id="fileInput" accept="image/*">
         <div class="scanline"></div>
-        <div class="compare-box" id="compareBox">
-          <img id="compareOriginal" alt="original">
-          <div class="after"><img id="compareAfter" alt="preview"></div>
-          <div class="compare-handle" id="compareHandle"></div>
-          <input type="range" class="compare-slider" id="compareSlider" min="0" max="100" value="50">
-          <div class="compare-labels"><span>ОРИГИНАЛ</span><span>ПРЕДПРОСМОТР</span></div>
-        </div>
-        <div class="label" id="uploadLabel">Загрузите фото</div>
-        <div class="hint" id="uploadHint">JPEG / PNG · до 20 MB</div>
-        <div class="preview-badge" id="previewBadge">◆ ПРЕДПРОСМОТР · НЕ СПИСЫВАЕТ ЛИМИТ</div>
+        <div class="label" id="uploadLabel">Загрузить своё фото</div>
+        <div class="hint" id="uploadHint">или смотрите примеры ниже</div>
       </label>
       <div class="error" id="errorMsg"></div>
-      <div class="section-label">Выберите стиль · предпросмотр</div>
+      <div class="section-label">5 стилей · нажмите для сравнения</div>
       <div class="deck" id="deck"></div>
-      <button class="cta secondary" id="previewBtn" disabled>ПОКАЗАТЬ СРАВНЕНИЕ</button>
-      <button class="cta" id="processBtn" disabled>ОБРАБОТАТЬ ВЫБРАННЫЙ СТИЛЬ</button>
+      <button class="cta" id="processBtn">ОБРАБОТАТЬ ВЫБРАННЫЙ СТИЛЬ</button>
     </div>
   </div>
   <div class="specs">
-    <div class="spec-row"><span class="k">FACE RESTORATION</span><span class="v">GFPGAN v1.4 / CodeFormer</span></div>
-    <div class="spec-row"><span class="k">UPSCALE</span><span class="v">Real-ESRGAN x4plus</span></div>
+    <div class="spec-row"><span class="k">FACE RESTORE</span><span class="v" id="specModel">CodeFormer · ComfyUI</span></div>
     <div class="spec-row"><span class="k">PREVIEW</span><span class="v">Мгновенный · без лимита</span></div>
-    <div class="spec-row"><span class="k">RUNTIME</span><span class="v">FastAPI + Aiogram + Docker</span></div>
+    <div class="spec-row"><span class="k">MODELS</span><span class="v">~/ComfyUI/models/</span></div>
   </div>
-  <div class="footnote">Предпросмотр показывает пример стиля. Финальная обработка — полное качество + face restore.<br>Лимит 5 обработок на сессию контролируется backend.</div>
 </div>
 <script>
-const STYLES = [
+const STYLES=[
   {id:'upgrade',num:'01',name:'Upgrade'},
   {id:'quiet_luxury',num:'02',name:'Quiet Luxury'},
   {id:'cinematic_twilight',num:'03',name:'Cinematic Twilight'},
@@ -119,157 +106,139 @@ const STYLES = [
   {id:'magazine_cover',num:'05',name:'Magazine Cover'},
 ];
 let sessionId=null, selectedFile=null, activeStyle='upgrade';
-let previews={}, results={}, originalDataUrl=null;
+let previews={}, results={}, originalDataUrl=null, isDemo=true;
 
 async function initSession(){
-  const p=new URLSearchParams(location.search);
-  sessionId=p.get('session');
-  if(!sessionId){
+  try{
     const r=await fetch('/session',{method:'POST'});
-    sessionId=(await r.json()).session_id;
-    history.replaceState(null,'',`?session=${sessionId}`);
-  }
-  updateLimit(0,5);
+    const d=await r.json();
+    sessionId=d.session_id;
+    updateLimit(0,d.limit);
+  }catch(e){document.getElementById('errorMsg').textContent='Сервер не отвечает — запустите uvicorn app:app';}
 }
 
-function updateLimit(used,limit){
-  document.getElementById('limitBadge').textContent=`${used} / ${limit} ИСПОЛЬЗОВАНО`;
+function updateLimit(used,limit=5){
+  document.getElementById('limitBadge').textContent=`${used} / ${limit}`;
 }
 
 function buildDeck(){
   document.getElementById('deck').innerHTML=STYLES.map(s=>`
     <div class="card${s.id===activeStyle?' active':''}${results[s.id]?' done':''}" data-style="${s.id}">
-      <div class="img${previews[s.id]?' has-preview':''}">
-        <div class="placeholder">${s.num}</div>
-        <img src="${previews[s.id]||''}" alt="${s.name}">
-      </div>
+      <div class="img"><img src="${previews[s.id]||''}" alt="${s.name}"></div>
       <div class="tag"><div class="num">${s.num}</div><div class="name">${s.name}</div></div>
     </div>`).join('');
-  document.querySelectorAll('.card').forEach(card=>{
-    card.onclick=()=>{
-      activeStyle=card.dataset.style;
-      document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
-      card.classList.add('active');
-      updateCompare();
-      updateButtons();
-    };
+  document.querySelectorAll('.card').forEach(c=>{
+    c.onclick=()=>{activeStyle=c.dataset.style;document.querySelectorAll('.card').forEach(x=>x.classList.remove('active'));c.classList.add('active');updateCompare();updateBtn();};
   });
 }
 
 function updateCompare(){
-  if(!originalDataUrl||!previews[activeStyle]) return;
-  document.getElementById('compareOriginal').src=originalDataUrl;
-  document.getElementById('compareAfter').src=previews[activeStyle];
+  const orig=originalDataUrl||previews._original;
+  const after=previews[activeStyle];
+  if(!orig||!after)return;
+  document.getElementById('compareOriginal').src=orig;
+  document.getElementById('compareAfter').src=after;
   document.getElementById('compareBox').classList.add('visible');
 }
 
-function updateButtons(){
+function updateBtn(){
   const btn=document.getElementById('processBtn');
-  if(results[activeStyle]){
-    btn.textContent='СКАЧАТЬ В МАК. КАЧЕСТВЕ';
-  } else {
-    btn.textContent='ОБРАБОТАТЬ «'+STYLES.find(s=>s.id===activeStyle).name.toUpperCase()+'»';
-  }
-  btn.disabled=!selectedFile;
+  if(!selectedFile){btn.textContent='ЗАГРУЗИТЕ ФОТО ДЛЯ ОБРАБОТКИ';btn.disabled=true;return;}
+  btn.disabled=false;
+  btn.textContent=results[activeStyle]?'СКАЧАТЬ РЕЗУЛЬТАТ':`ОБРАБОТАТЬ «${STYLES.find(s=>s.id===activeStyle).name.toUpperCase()}»`;
 }
 
-document.getElementById('compareSlider').addEventListener('input',e=>{
+async function loadDemos(){
+  try{
+    const r=await fetch('/demo/samples');
+    if(!r.ok) throw new Error('Демо не готовы');
+    const d=await r.json();
+    originalDataUrl=d.original;
+    previews._original=d.original;
+    d.previews.forEach(p=>{previews[p.style]=p.thumbnail;});
+    buildDeck();
+    updateCompare();
+  }catch(e){
+    // fallback: static files
+    previews._original='/static/demo/original.jpg';
+    originalDataUrl=previews._original;
+    STYLES.forEach(s=>{previews[s.id]=`/static/demo/${s.id}.jpg`;});
+    buildDeck();
+    updateCompare();
+  }
+}
+
+document.getElementById('compareSlider').oninput=e=>{
   const v=e.target.value;
   document.querySelector('.compare-box .after').style.clipPath=`inset(0 ${100-v}% 0 0)`;
   document.getElementById('compareHandle').style.left=v+'%';
-});
+};
 
-document.getElementById('previewBtn').addEventListener('click',()=>{
-  document.getElementById('compareBox').classList.add('visible');
-  updateCompare();
-  document.getElementById('compareBox').scrollIntoView({behavior:'smooth',block:'nearest'});
-});
-
-document.getElementById('fileInput').addEventListener('change',async e=>{
+document.getElementById('fileInput').onchange=async e=>{
   const file=e.target.files[0];
-  if(!file) return;
-  selectedFile=file;
-  previews={}; results={};
-  originalDataUrl=URL.createObjectURL(file);
+  if(!file)return;
+  selectedFile=file; results={}; isDemo=false;
+  document.getElementById('demoBanner').textContent='◆ ВАШЕ ФОТО · ПРЕДПРОСМОТР';
   document.getElementById('uploadLabel').textContent=file.name;
   document.getElementById('uploadHint').textContent='Генерируем предпросмотр…';
   document.getElementById('errorMsg').textContent='';
-  document.getElementById('uploadZone').classList.add('previewing');
-  document.getElementById('previewBtn').disabled=true;
-  document.getElementById('processBtn').disabled=true;
-  buildDeck();
+  document.getElementById('uploadZone').classList.add('busy');
+  originalDataUrl=URL.createObjectURL(file);
+  previews._original=originalDataUrl;
 
   const form=new FormData();
   form.append('file',file);
   try{
-    const res=await fetch('/preview/all',{method:'POST',body:form});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.detail||'Ошибка предпросмотра');
-    data.previews.forEach(p=>{ previews[p.style]=p.thumbnail; });
-    document.getElementById('uploadHint').textContent='Выберите стиль · затем финальная обработка';
-    document.getElementById('previewBadge').classList.add('visible');
-    document.getElementById('previewBtn').disabled=false;
-    document.getElementById('processBtn').disabled=false;
-    buildDeck();
-    updateCompare();
-    updateButtons();
+    const r=await fetch('/preview/all',{method:'POST',body:form});
+    const text=await r.text();
+    let data;
+    try{data=JSON.parse(text);}catch{throw new Error('Сервер вернул не JSON — проверьте что uvicorn запущен');}
+    if(!r.ok) throw new Error(typeof data.detail==='string'?data.detail:(data.detail?.message||'Ошибка предпросмотра'));
+    previews={_original:originalDataUrl};
+    data.previews.forEach(p=>{previews[p.style]=p.thumbnail;});
+    document.getElementById('uploadHint').textContent='Выберите стиль → финальная обработка';
+    buildDeck(); updateCompare(); updateBtn();
   }catch(err){
     document.getElementById('errorMsg').textContent=err.message;
-    document.getElementById('uploadHint').textContent='Ошибка предпросмотра';
+    document.getElementById('uploadHint').textContent='Ошибка — попробуйте другое фото';
   }finally{
-    document.getElementById('uploadZone').classList.remove('previewing');
+    document.getElementById('uploadZone').classList.remove('busy');
   }
-});
+};
 
-document.getElementById('processBtn').addEventListener('click',async()=>{
-  if(results[activeStyle]){
-    window.open(`/download/${sessionId}/${activeStyle}`,'_blank');
-    return;
-  }
-  if(!selectedFile) return;
+document.getElementById('processBtn').onclick=async()=>{
+  if(results[activeStyle]){window.open(`/download/${sessionId}/${activeStyle}`,'_blank');return;}
+  if(!selectedFile||!sessionId)return;
   const btn=document.getElementById('processBtn');
-  const zone=document.getElementById('uploadZone');
   btn.disabled=true;
-  zone.classList.add('processing');
+  document.getElementById('uploadZone').classList.add('busy');
   document.getElementById('errorMsg').textContent='';
-
   const form=new FormData();
   form.append('session_id',sessionId);
   form.append('style',activeStyle);
   form.append('file',selectedFile);
-
   try{
-    const res=await fetch('/process',{method:'POST',body:form});
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.detail?.message||data.detail||'Ошибка обработки');
+    const r=await fetch('/process',{method:'POST',body:form});
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.detail?.message||data.detail||'Ошибка');
     results[data.style]=data.download_url;
-    const card=document.querySelector(`[data-style="${data.style}"]`);
-    if(card){
-      card.querySelector('img').src=data.download_url+'?t='+Date.now();
-      card.querySelector('.img').classList.add('has-preview');
-      card.classList.add('done');
-    }
-    updateLimit(5-data.remaining,5);
-    updateButtons();
+    previews[data.style]=data.download_url+'?t='+Date.now();
+    document.querySelector(`[data-style="${data.style}"]`)?.classList.add('done');
+    updateLimit(5-data.remaining);
+    updateBtn();
+    updateCompare();
+    document.getElementById('specModel').textContent=data.face_model+' · local';
   }catch(err){
     document.getElementById('errorMsg').textContent=err.message;
   }finally{
     btn.disabled=false;
-    zone.classList.remove('processing');
+    document.getElementById('uploadZone').classList.remove('busy');
+    updateBtn();
   }
-});
+};
 
-const spores=document.getElementById('spores');
-for(let i=0;i<22;i++){
-  const s=document.createElement('div');
-  s.className='spore';
-  s.style.left=Math.random()*100+'%';
-  s.style.bottom=Math.random()*60+'%';
-  s.style.animationDelay=Math.random()*9+'s';
-  spores.appendChild(s);
-}
-buildDeck();
 initSession();
+loadDemos();
 </script>
 </body>
 </html>

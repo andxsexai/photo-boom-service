@@ -14,8 +14,10 @@ from PIL import Image
 from pydantic import BaseModel
 
 import base64
+import os
+import sys
 
-from config import settings
+from config import DEMO_DIR, settings
 from core.enhancer import PhotoEnhancer
 from core.filters import STYLE_META, Style, all_styles, image_to_bytes
 from core.image_utils import load_image_normalized
@@ -93,11 +95,18 @@ class PreviewAllResponse(BaseModel):
 
 
 def _load_image(file: UploadFile) -> Image.Image:
-    if not file.content_type or not file.content_type.startswith("image/"):
-        raise HTTPException(400, "File must be an image (JPEG, PNG, WebP)")
     data = file.file.read()
     if len(data) > 20 * 1024 * 1024:
         raise HTTPException(400, "Image too large (max 20 MB)")
+
+    ext = Path(file.filename or "").suffix.lower()
+    allowed_ext = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
+    ctype = (file.content_type or "").lower()
+
+    if ctype and not ctype.startswith("image/") and ctype != "application/octet-stream":
+        if ext not in allowed_ext:
+            raise HTTPException(400, f"Unsupported file type: {ctype}")
+
     try:
         return load_image_normalized(data)
     except Exception as exc:
@@ -255,6 +264,60 @@ async def download(session_id: str, style: str):
     if not path.exists():
         raise HTTPException(404, "Processed image not found")
     return FileResponse(path, media_type="image/jpeg", filename=f"photo-boom-{style}.jpg")
+
+
+@app.get("/demo/samples")
+async def demo_samples():
+    """Pre-generated style examples — always available without upload."""
+    original = DEMO_DIR / "original.jpg"
+    if not original.exists():
+        raise HTTPException(503, "Demo samples not generated yet. Run: python scripts/generate_demos.py")
+
+    previews = []
+    for s in all_styles():
+        path = DEMO_DIR / f"{s.value}.jpg"
+        if not path.exists():
+            continue
+        img = Image.open(path).convert("RGB")
+        previews.append(
+            PreviewItem(
+                style=s.value,
+                name=STYLE_META[s]["name"],
+                num=STYLE_META[s]["num"],
+                thumbnail=_to_data_uri(img, quality=82),
+            )
+        )
+
+    orig_uri = _to_data_uri(Image.open(original).convert("RGB"), quality=82)
+    return {
+        "original": orig_uri,
+        "previews": previews,
+        "note": "Примеры обработки на демо-фото. Загрузите своё — увидите предпросмотр на нём.",
+    }
+
+
+@app.get("/demo/{style}")
+async def demo_style_image(style: Style):
+    path = DEMO_DIR / f"{style.value}.jpg"
+    if not path.exists():
+        raise HTTPException(404, "Demo not found")
+    return FileResponse(path, media_type="image/jpeg")
+
+
+@app.on_event("startup")
+async def ensure_demos():
+    if (DEMO_DIR / "original.jpg").exists():
+        return
+    try:
+        import subprocess
+
+        subprocess.Popen(
+            [sys.executable, str(Path(__file__).parent / "scripts" / "generate_demos.py")],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception:
+        pass
 
 
 @app.post("/preview/all", response_model=PreviewAllResponse)
