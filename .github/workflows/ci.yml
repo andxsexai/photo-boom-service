@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Smoke test — imports & filters
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from core.filters import Style, apply_style, all_styles
+          from core.session import SessionManager, SessionLimitError
+          from core.fallback import detect_artifacts
+          from core.image_utils import gentle_face_prep, resize_for_preview
+
+          img = Image.new("RGB", (256, 256), (180, 140, 120))
+          for style in all_styles():
+              result = apply_style(img, style)
+              assert result.size == img.size, style
+
+          sm = SessionManager(limit=5)
+          s = sm.create()
+          for st in all_styles():
+              s.consume(st)
+          try:
+              s.consume(Style.UPGRADE)
+              raise SystemExit("limit should block")
+          except SessionLimitError:
+              pass
+
+          metrics = detect_artifacts(img, img)
+          assert "should_fallback" in metrics
+          print("All smoke tests passed")
+          PY
+
+      - name: Smoke test — FastAPI app
+        run: |
+          python - <<'PY'
+          from fastapi.testclient import TestClient
+          from app import app
+
+          client = TestClient(app)
+          assert client.get("/health").json()["status"] == "ok"
+          assert len(client.get("/styles").json()) == 5
+          assert client.get("/demo/samples").status_code == 200
+          print("API smoke tests passed")
+          PY
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t photo-boom:ci .
